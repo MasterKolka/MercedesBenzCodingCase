@@ -16,7 +16,7 @@ public class CreateShortenedUrlRequest
     public string Url { get; set; } = string.Empty;
 
     /// <summary>
-    ///     Desired short name (optional)
+    ///     Desired short name (optional). Case sensitive.
     /// </summary>
     [MaxLength(64)]
     [ShortName]
