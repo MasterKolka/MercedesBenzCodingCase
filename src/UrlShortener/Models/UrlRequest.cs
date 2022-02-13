@@ -9,7 +9,7 @@ namespace UrlShortener.Models;
 public class UrlRequest
 {
     /// <summary>
-    ///     Shortened url path (http://host/<b>ShortName</b>)
+    ///     Shortened url path (http://host/<b>ShortName</b>). Case sensitive.
     /// </summary>
     [Required]
     [MaxLength(64)]
