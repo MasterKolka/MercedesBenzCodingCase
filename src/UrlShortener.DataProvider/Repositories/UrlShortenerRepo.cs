@@ -49,7 +49,7 @@ public class UrlShortenerRepo : IUrlShortenerRepo
         return await context.ShortenedUrlAnalytics.Where(x => x.ShortenedUrl.Id == shorenedUrl.Id && x.Date > after).ToArrayAsync();
     }
 
-    public async Task<string> CreateUrl(string url, string? shortName = null)
+    public async Task<(string shortName, bool isNew)> CreateUrl(string url, string? shortName = null)
     {
         var normalizedUrl = NormalizeUrl(url);
         var existingItem = await context.ShortenedUrls.FirstOrDefaultAsync(x => x.Url == normalizedUrl);
@@ -57,7 +57,7 @@ public class UrlShortenerRepo : IUrlShortenerRepo
         // if url exists with the same short name (or shortName param is null) then just return shortened version
         if (existingItem != null && (shortName == null || shortName == existingItem.Shortened))
         {
-            return existingItem.Shortened;
+            return (existingItem.Shortened, false);
         }
 
         string shortened = "";
@@ -138,7 +138,7 @@ public class UrlShortenerRepo : IUrlShortenerRepo
         }
         await context.SaveChangesAsync();
 
-        return shortened;
+        return (shortened, true);
     }
 
     public async Task<bool> DeleteShortUrl(string shortName)

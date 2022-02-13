@@ -50,6 +50,7 @@ public class UrlController : ControllerBase
     ///     If url exists and different ShortName was entered - creates a new shortened url with a desired name replacing an old one.
     /// </summary>
     /// <param name="request"><see cref="CreateShortenedUrlRequest"/></param>
+    /// <response code="200"><see cref="GetUrlResponse"/></response>
     /// <response code="201"><see cref="GetUrlResponse"/></response>
     /// <response code="400">Bad request</response>
     [HttpPost]
@@ -69,10 +70,10 @@ public class UrlController : ControllerBase
         return new ObjectResult(new GetUrlResponse
         {
             Url = request.Url,
-            ShortName = result,
-            ShortenedUrl = GetShortenedUrl(result)
+            ShortName = result.shortName,
+            ShortenedUrl = GetShortenedUrl(result.shortName)
         })
-        { StatusCode = StatusCodes.Status201Created };
+        { StatusCode = result.isNew ? StatusCodes.Status201Created : StatusCodes.Status200OK };
     }
 
     /// <summary>
