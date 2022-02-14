@@ -25,9 +25,10 @@ public class UrlController : ControllerBase
     ///     Returns info about a shortened url
     /// </summary>
     /// <param name="request"><see cref="UrlRequest"/></param>
-    /// <response code="200"><see cref="GetUrlResponse"/></response>
-    /// <response code="404">Not found</response>
     [HttpGet]
+    [ProducesResponseType(typeof(GetUrlResponse), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
     public async Task<ActionResult<GetUrlResponse>> GetUrl([FromQuery] UrlRequest request)
     {
         var result = await _urlShortenerRepo.GetUrl(request.ShortName);
@@ -50,10 +51,10 @@ public class UrlController : ControllerBase
     ///     If url exists and different ShortName was entered - creates a new shortened url with a desired name replacing an old one.
     /// </summary>
     /// <param name="request"><see cref="CreateShortenedUrlRequest"/></param>
-    /// <response code="200"><see cref="GetUrlResponse"/></response>
-    /// <response code="201"><see cref="GetUrlResponse"/></response>
-    /// <response code="400">Bad request</response>
     [HttpPost]
+    [ProducesResponseType(typeof(GetUrlResponse), 200)]
+    [ProducesResponseType(typeof(GetUrlResponse), 201)]
+    [ProducesResponseType(400)]
     public async Task<ActionResult<GetUrlResponse>> CreateShortenedUrl(CreateShortenedUrlRequest request)
     {
         if (request.ShortName != null)
@@ -79,9 +80,10 @@ public class UrlController : ControllerBase
     /// <summary>
     ///     Deletes a url if exists
     /// </summary>
-    /// <response code="204">Success</response>
-    /// <response code="404">Not found</response>
     [HttpDelete]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
     public async Task<ActionResult> DeleteUrl([FromQuery] UrlRequest request)
     {
         var result = await _urlShortenerRepo.DeleteShortUrl(request.ShortName);
@@ -96,9 +98,10 @@ public class UrlController : ControllerBase
     ///     Returns analytics for last 24h
     /// </summary>
     /// <param name="request"><see cref="UrlRequest"/></param>
-    /// <response code="200"><see cref="ShortenedUrlAnalyticsResponse"/></response>
-    /// <response code="404">Not found</response>
     [HttpGet(nameof(GetAnalytics))]
+    [ProducesResponseType(typeof(ShortenedUrlAnalyticsResponse), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
     public async Task<ActionResult<ShortenedUrlAnalyticsResponse>> GetAnalytics([FromQuery] UrlRequest request)
     {
         var url = await _urlShortenerRepo.GetUrl(request.ShortName);
